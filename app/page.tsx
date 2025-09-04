@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useSession, signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { RefreshCw, LogOut, User } from "lucide-react"
@@ -38,10 +38,9 @@ export default function HomePage() {
     }
   }, [status, router])
 
-  const fetchRecords = async () => {
+  const fetchRecords = useCallback(async () => {
     try {
       setIsLoading(true)
-      const startTime = Date.now()
       
       const url = `/api/records?month=${selectedMonth}&year=${selectedYear}`
       
@@ -55,15 +54,14 @@ export default function HomePage() {
       })
       
       clearTimeout(timeoutId)
-      const endTime = Date.now()
       
       if (!response.ok) {
         throw new Error("Failed to fetch records")
       }
       const data = await response.json()
       setRecords(data)
-    } catch (error: any) {
-      if (error?.name === 'AbortError') {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'AbortError') {
         toast.error("Request timed out - please try again")
       } else {
         toast.error("Failed to load records")
@@ -72,7 +70,7 @@ export default function HomePage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [selectedMonth, selectedYear])
 
   // Filter records based on search query
   useEffect(() => {
@@ -93,7 +91,7 @@ export default function HomePage() {
     if (session) {
       fetchRecords()
     }
-  }, [session, selectedMonth, selectedYear])
+  }, [session, fetchRecords])
 
   const handleSearch = (query: string) => {
     setSearchQuery(query)

@@ -9,15 +9,16 @@ echo "🚀 PKT Monthly Record - Docker Deployment"
 echo "=========================================="
 
 # Check if Docker and Docker Compose are installed
-if ! command -v docker &> /dev/null; then
-    echo "❌ Docker is not installed. Please install Docker first."
-    exit 1
-fi
+# if ! command -v docker &> /dev/null; then
+#     echo "❌ Docker is not installed. Please install Docker first."
+#     exit 1
+# fi
 
-if ! command -v docker-compose &> /dev/null; then
-    echo "❌ Docker Compose is not installed. Please install Docker Compose first."
-    exit 1
-fi
+# if ! command -v docker &> /dev/null || ! docker compose version &> /dev/null; then
+#     echo "❌ Docker Compose is not installed or not available. Please install Docker with Compose plugin."
+#     echo "   You can install it from: https://docs.docker.com/compose/install/"
+#     exit 1
+# fi
 
 # Function to generate random password
 generate_password() {
@@ -74,10 +75,10 @@ fi
 
 # Build and start the application
 echo "🔨 Building Docker images..."
-docker-compose build
+docker compose build
 
 echo "🗄️  Starting PostgreSQL and running database migrations..."
-docker-compose up -d postgres
+docker compose up -d postgres
 
 # Wait for PostgreSQL to be ready
 echo "⏳ Waiting for PostgreSQL to be ready..."
@@ -85,20 +86,20 @@ sleep 10
 
 # Run database migrations
 echo "🔄 Running Prisma migrations..."
-docker-compose run --rm app npx prisma migrate deploy
+docker compose run --rm app npx prisma migrate deploy
 
 echo "🌱 Seeding database (if needed)..."
-docker-compose run --rm app npx prisma db seed || echo "No seed script found, skipping..."
+docker compose run --rm app npx prisma db seed || echo "No seed script found, skipping..."
 
 # Start all services
 echo "🚀 Starting all services..."
-docker-compose up -d $COMPOSE_PROFILES
+docker compose up -d $COMPOSE_PROFILES
 
 echo ""
 echo "✅ Deployment completed successfully!"
 echo ""
 echo "📋 Service Status:"
-docker-compose ps
+docker compose ps
 
 echo ""
 echo "🌐 Your application is now running:"
@@ -111,16 +112,16 @@ fi
 echo "   - Database: postgresql://localhost:5432"
 echo ""
 echo "📊 To view logs:"
-echo "   docker-compose logs -f"
+echo "   docker compose logs -f"
 echo ""
 echo "🛑 To stop the application:"
-echo "   docker-compose down"
+echo "   docker compose down"
 echo ""
 echo "🔄 To restart the application:"
-echo "   docker-compose restart"
+echo "   docker compose restart"
 echo ""
 echo "🗑️  To completely remove (including data):"
-echo "   docker-compose down -v"
+echo "   docker compose down -v"
 
 # Show login credentials
 echo ""

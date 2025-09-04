@@ -12,7 +12,7 @@ export async function GET() {
       database: 'connected',
       service: 'pkt-monthly-record'
     })
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         status: 'unhealthy',

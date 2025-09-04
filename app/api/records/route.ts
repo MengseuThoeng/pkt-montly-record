@@ -4,8 +4,6 @@ import { CreateRecordInput } from '@/lib/types'
 
 export async function GET(request: NextRequest) {
   try {
-    const startTime = Date.now()
-    
     const { searchParams } = new URL(request.url)
     const month = searchParams.get('month')
     const year = searchParams.get('year')
@@ -31,8 +29,6 @@ export async function GET(request: NextRequest) {
         orderDate: 'desc' // Order by orderDate instead of createdAt for better performance
       }
     })
-    
-    const endTime = Date.now()
     
     return NextResponse.json(records)
   } catch (error) {

@@ -39,19 +39,19 @@ nano .env.production
 ### 3. Build and Deploy
 ```bash
 # Build the application
-docker-compose build
+docker compose build
 
 # Start the database
-docker-compose up -d postgres
+docker compose up -d postgres
 
 # Wait for database to be ready (about 10 seconds)
 sleep 10
 
 # Run database migrations
-docker-compose run --rm app npx prisma migrate deploy
+docker compose run --rm app npx prisma migrate deploy
 
 # Start all services
-docker-compose up -d
+docker compose up -d
 ```
 
 ## 🌐 Production with Nginx & SSL
@@ -59,7 +59,7 @@ docker-compose up -d
 ### 1. Enable Nginx
 ```bash
 # Start with Nginx reverse proxy
-docker-compose --profile production up -d
+docker compose --profile production up -d
 ```
 
 ### 2. SSL Certificate Setup
@@ -86,37 +86,37 @@ Update `nginx.conf`:
 ### View logs
 ```bash
 # All services
-docker-compose logs -f
+docker compose logs -f
 
 # Specific service
-docker-compose logs -f app
-docker-compose logs -f postgres
+docker compose logs -f app
+docker compose logs -f postgres
 ```
 
 ### Database Management
 ```bash
 # Access database
-docker-compose exec postgres psql -U pkt_user -d monthly_records
+docker compose exec postgres psql -U pkt_user -d monthly_records
 
 # Backup database
-docker-compose exec postgres pg_dump -U pkt_user monthly_records > backup.sql
+docker compose exec postgres pg_dump -U pkt_user monthly_records > backup.sql
 
 # Restore database
-docker-compose exec -T postgres psql -U pkt_user monthly_records < backup.sql
+docker compose exec -T postgres psql -U pkt_user monthly_records < backup.sql
 ```
 
 ### Application Management
 ```bash
 # Restart application
-docker-compose restart app
+docker compose restart app
 
 # Update application
 git pull
-docker-compose build app
-docker-compose up -d app
+docker compose build app
+docker compose up -d app
 
 # Reset database (⚠️ This will delete all data!)
-docker-compose run --rm app npx prisma migrate reset --force
+docker compose run --rm app npx prisma migrate reset --force
 ```
 
 ## 🔐 Security Checklist
@@ -143,7 +143,7 @@ docker stats
 
 ### System Status
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 ## 🛠️ Troubleshooting
@@ -151,20 +151,20 @@ docker-compose ps
 ### Application won't start
 ```bash
 # Check logs
-docker-compose logs app
+docker compose logs app
 
 # Common fixes
-docker-compose restart app
-docker-compose down && docker-compose up -d
+docker compose restart app
+docker compose down && docker compose up -d
 ```
 
 ### Database connection issues
 ```bash
 # Check database logs
-docker-compose logs postgres
+docker compose logs postgres
 
 # Test connection
-docker-compose exec postgres pg_isready -U pkt_user
+docker compose exec postgres pg_isready -U pkt_user
 ```
 
 ### Performance issues
@@ -173,7 +173,7 @@ docker-compose exec postgres pg_isready -U pkt_user
 docker stats
 
 # Scale if needed (multiple app instances)
-docker-compose up -d --scale app=2
+docker compose up -d --scale app=2
 ```
 
 ## 🔄 Updates
@@ -184,14 +184,14 @@ docker-compose up -d --scale app=2
 git pull
 
 # Rebuild and restart
-docker-compose build app
-docker-compose up -d app
+docker compose build app
+docker compose up -d app
 ```
 
 ### Database Migrations
 ```bash
 # Run new migrations
-docker-compose run --rm app npx prisma migrate deploy
+docker compose run --rm app npx prisma migrate deploy
 ```
 
 ## 📱 Default Login
@@ -204,7 +204,7 @@ docker-compose run --rm app npx prisma migrate deploy
 ## 🆘 Support
 
 If you encounter issues:
-1. Check the logs: `docker-compose logs -f`
+1. Check the logs: `docker compose logs -f`
 2. Verify environment variables in `.env.production`
 3. Ensure all required ports are available
 4. Check Docker and Docker Compose versions

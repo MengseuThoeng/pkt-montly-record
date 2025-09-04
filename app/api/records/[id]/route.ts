@@ -20,7 +20,7 @@ export async function GET(
     }
     
     return NextResponse.json(record)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching record:', error)
     return NextResponse.json(
       { error: 'Failed to fetch record' },
@@ -39,7 +39,7 @@ export async function PUT(
     const id = parseInt(paramId)
     
     // Calculate derived values if relevant fields are updated
-    const updateData: any = { ...body }
+    const updateData: Record<string, unknown> = { ...body }
     
     if (body.total !== undefined || body.deposit !== undefined) {
       const currentRecord = await prisma.record.findUnique({
@@ -68,7 +68,7 @@ export async function PUT(
     })
     
     return NextResponse.json(record)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error updating record:', error)
     return NextResponse.json(
       { error: 'Failed to update record' },
@@ -88,7 +88,7 @@ export async function DELETE(
     })
     
     return NextResponse.json({ message: 'Record deleted successfully' })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error deleting record:', error)
     return NextResponse.json(
       { error: 'Failed to delete record' },
