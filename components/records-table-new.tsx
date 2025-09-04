@@ -34,23 +34,10 @@ export function RecordsTable({ records, onRefresh }: RecordsTableProps) {
   const [isDeleting, setIsDeleting] = useState<number | null>(null)
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [recordToDelete, setRecordToDelete] = useState<Record | null>(null)
-  const [editRecord, setEditRecord] = useState<Record | null>(null)
-  const [editFormOpen, setEditFormOpen] = useState(false)
 
   const handleDeleteClick = (record: Record) => {
     setRecordToDelete(record)
     setDeleteConfirmOpen(true)
-  }
-
-  const handleEditClick = (record: Record) => {
-    setEditRecord(record)
-    setEditFormOpen(true)
-  }
-
-  const handleEditSuccess = () => {
-    setEditFormOpen(false)
-    setEditRecord(null)
-    onRefresh()
   }
 
   const handleConfirmDelete = async () => {
@@ -154,9 +141,10 @@ export function RecordsTable({ records, onRefresh }: RecordsTableProps) {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleEditClick(record)}>
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
+                        <DropdownMenuItem asChild>
+                          <div className="w-full">
+                            <RecordForm record={record} onSuccess={onRefresh} />
+                          </div>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => handleDeleteClick(record)}
@@ -175,16 +163,6 @@ export function RecordsTable({ records, onRefresh }: RecordsTableProps) {
           </TableBody>
         </Table>
       </div>
-
-      {/* Edit Record Form */}
-      {editRecord && (
-        <RecordForm 
-          record={editRecord} 
-          onSuccess={handleEditSuccess}
-          isOpen={editFormOpen}
-          onOpenChange={setEditFormOpen}
-        />
-      )}
 
       {/* Confirmation Dialog */}
       <ConfirmationDialog

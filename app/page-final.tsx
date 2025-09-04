@@ -37,37 +37,15 @@ export default function HomePage() {
 
   const fetchRecords = async () => {
     try {
-      setIsLoading(true)
-      console.log(`Fetching records for ${selectedMonth}/${selectedYear}`)
-      const startTime = Date.now()
-      
       const url = `/api/records?month=${selectedMonth}&year=${selectedYear}`
-      
-      // Add timeout to the fetch request
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
-      
-      const response = await fetch(url, {
-        signal: controller.signal,
-        cache: 'no-store' // Prevent caching issues
-      })
-      
-      clearTimeout(timeoutId)
-      const endTime = Date.now()
-      console.log(`API call took ${endTime - startTime}ms`)
-      
+      const response = await fetch(url)
       if (!response.ok) {
         throw new Error("Failed to fetch records")
       }
       const data = await response.json()
-      console.log(`Received ${data.length} records`)
       setRecords(data)
-    } catch (error: any) {
-      if (error?.name === 'AbortError') {
-        toast.error("Request timed out - please try again")
-      } else {
-        toast.error("Failed to load records")
-      }
+    } catch (error) {
+      toast.error("Failed to load records")
       console.error(error)
     } finally {
       setIsLoading(false)
@@ -81,13 +59,14 @@ export default function HomePage() {
   }, [session, selectedMonth, selectedYear])
 
   const handleRefresh = () => {
+    setIsLoading(true)
     fetchRecords()
   }
 
   const handleMonthChange = (month: string, year: string) => {
     setSelectedMonth(month)
     setSelectedYear(year)
-    // Don't set loading here - let useEffect handle it
+    setIsLoading(true)
   }
 
   const handleSignOut = () => {
@@ -146,7 +125,6 @@ export default function HomePage() {
         selectedMonth={selectedMonth}
         selectedYear={selectedYear}
         onMonthChange={handleMonthChange}
-        isLoading={isLoading}
       />
 
       {/* Dashboard Stats */}

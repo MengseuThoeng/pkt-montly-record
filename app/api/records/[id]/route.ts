@@ -4,11 +4,12 @@ import { UpdateRecordInput } from '@/lib/types'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const record = await prisma.record.findUnique({
-      where: { id: parseInt(params.id) }
+      where: { id: parseInt(id) }
     })
     
     if (!record) {
@@ -30,11 +31,12 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id: paramId } = await params
     const body: Partial<UpdateRecordInput> = await request.json()
-    const id = parseInt(params.id)
+    const id = parseInt(paramId)
     
     // Calculate derived values if relevant fields are updated
     const updateData: any = { ...body }
@@ -77,11 +79,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     await prisma.record.delete({
-      where: { id: parseInt(params.id) }
+      where: { id: parseInt(id) }
     })
     
     return NextResponse.json({ message: 'Record deleted successfully' })

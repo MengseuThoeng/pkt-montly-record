@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, Edit, Plus } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -47,11 +47,17 @@ type RecordFormData = z.infer<typeof recordSchema>
 interface RecordFormProps {
   record?: Record
   onSuccess: () => void
+  isOpen?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
-export function RecordForm({ record, onSuccess }: RecordFormProps) {
-  const [isOpen, setIsOpen] = useState(false)
+export function RecordForm({ record, onSuccess, isOpen: externalIsOpen, onOpenChange }: RecordFormProps) {
+  const [internalIsOpen, setInternalIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  // Use external control if provided, otherwise use internal state
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen
+  const setIsOpen = onOpenChange || setInternalIsOpen
 
   const form = useForm<RecordFormData>({
     resolver: zodResolver(recordSchema),
@@ -117,12 +123,27 @@ export function RecordForm({ record, onSuccess }: RecordFormProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button>{record ? "Edit" : "Add New Record"}</Button>
-      </DialogTrigger>
+      {/* Only show trigger button if not externally controlled */}
+      {externalIsOpen === undefined && (
+        <DialogTrigger asChild>
+          <Button>{record ? "Edit" : "Add New Record"}</Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{record ? "Edit Record" : "Add New Record"}</DialogTitle>
+          <DialogTitle>
+            {record ? (
+              <span className="flex items-center">
+                <Edit className="mr-2 h-5 w-5" />
+                Edit Record: {record.customerName}
+              </span>
+            ) : (
+              <span className="flex items-center">
+                <Plus className="mr-2 h-5 w-5" />
+                Add New Record
+              </span>
+            )}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
