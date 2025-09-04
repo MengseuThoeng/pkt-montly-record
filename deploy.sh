@@ -39,7 +39,7 @@ DATABASE_URL="postgresql://pkt_user:${DB_PASSWORD}@postgres:5432/monthly_records
 
 # NextAuth Configuration  
 NEXTAUTH_SECRET="${NEXTAUTH_SECRET}"
-NEXTAUTH_URL="http://localhost:5000"
+NEXTAUTH_URL="http://159.65.8.211:5000"
 
 # Node Environment
 NODE_ENV="production"
@@ -133,10 +133,10 @@ docker compose ps
 echo ""
 echo "🌐 Your application is now running:"
 if [[ $COMPOSE_PROFILES == *"production"* ]]; then
-    echo "   - Main app: http://localhost:8080 (via Nginx)"
-    echo "   - Direct app: http://localhost:5000"
+    echo "   - Main app: http://159.65.8.211:8080 (via Nginx)"
+    echo "   - Direct app: http://159.65.8.211:5000"
 else
-    echo "   - Main app: http://localhost:5000"
+    echo "   - Main app: http://159.65.8.211:5000"
 fi
 echo "   - Database: postgresql://localhost:5432"
 echo ""

@@ -13,8 +13,8 @@
    ```
 
 3. **Access your application:**
-   - Main app: http://localhost:5000
-   - With Nginx: http://localhost:8080
+   - Main app: http://159.65.8.211:5000
+   - With Nginx: http://159.65.8.211:8080
 
 ## 📋 Manual Deployment Steps
 
