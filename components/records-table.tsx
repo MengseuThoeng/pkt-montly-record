@@ -87,7 +87,87 @@ export function RecordsTable({ records, onRefresh }: RecordsTableProps) {
 
   return (
     <>
-      <div className="overflow-x-auto">
+      {/* Mobile View */}
+      <div className="block sm:hidden space-y-3">
+        {records.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            No records found. Add your first record to get started.
+          </div>
+        ) : (
+          records.map((record, index) => (
+            <div key={record.id} className="bg-white rounded-lg border p-4 space-y-3 shadow-sm">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-semibold text-sm">{record.customerName}</h3>
+                  <p className="text-xs text-muted-foreground">#{index + 1}</p>
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => handleEditClick(record)}>
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => handleDeleteClick(record)}
+                      disabled={isDeleting === record.id}
+                      className="text-red-600"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      {isDeleting === record.id ? "Deleting..." : "Delete"}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <span className="text-muted-foreground">Order:</span>
+                  <p className="font-medium">{record.order}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Date:</span>
+                  <p className="font-medium">{format(new Date(record.orderDate), "MMM dd")}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Total:</span>
+                  <p className="font-semibold text-green-600">{formatCurrency(record.total)}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Profit:</span>
+                  <Badge variant={record.profit > 0 ? "default" : "destructive"} className="text-xs">
+                    {formatCurrency(record.profit)}
+                  </Badge>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Kilo:</span>
+                  <p className="font-medium">{record.kilo.toFixed(2)}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Status:</span>
+                  <Badge variant={record.remain > 0 ? "destructive" : "secondary"} className="text-xs">
+                    {record.remain > 0 ? `Remain: ${formatCurrency(record.remain)}` : "Paid"}
+                  </Badge>
+                </div>
+              </div>
+              
+              <div className="text-xs border-t pt-2">
+                <div className="grid grid-cols-1 gap-1">
+                  <div><span className="text-muted-foreground">Location:</span> {record.location}</div>
+                  <div><span className="text-muted-foreground">Phone:</span> {record.phoneNumber}</div>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Desktop View */}
+      <div className="hidden sm:block overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>

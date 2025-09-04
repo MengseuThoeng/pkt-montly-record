@@ -25,66 +25,66 @@ export function DashboardStats({ records }: DashboardStatsProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Records</CardTitle>
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4 mb-4 sm:mb-6">
+      <Card className="col-span-1">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+          <CardTitle className="text-xs sm:text-sm font-medium">Records</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{stats.totalRecords}</div>
+        <CardContent className="pt-0">
+          <div className="text-lg sm:text-2xl font-bold">{stats.totalRecords}</div>
         </CardContent>
       </Card>
       
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+      <Card className="col-span-1">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+          <CardTitle className="text-xs sm:text-sm font-medium">Revenue</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-green-600">
+        <CardContent className="pt-0">
+          <div className="text-sm sm:text-2xl font-bold text-green-600">
             {formatCurrency(stats.totalRevenue)}
           </div>
         </CardContent>
       </Card>
       
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Profit</CardTitle>
+      <Card className="col-span-1">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+          <CardTitle className="text-xs sm:text-sm font-medium">Profit</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-blue-600">
+        <CardContent className="pt-0">
+          <div className="text-sm sm:text-2xl font-bold text-blue-600">
             {formatCurrency(stats.totalProfit)}
           </div>
         </CardContent>
       </Card>
       
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Capital</CardTitle>
+      <Card className="col-span-1">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+          <CardTitle className="text-xs sm:text-sm font-medium">Capital</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-purple-600">
+        <CardContent className="pt-0">
+          <div className="text-sm sm:text-2xl font-bold text-purple-600">
             {formatCurrency(stats.totalCapital)}
           </div>
         </CardContent>
       </Card>
       
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Remaining</CardTitle>
+      <Card className="col-span-1">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+          <CardTitle className="text-xs sm:text-sm font-medium">Remaining</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-red-600">
+        <CardContent className="pt-0">
+          <div className="text-sm sm:text-2xl font-bold text-red-600">
             {formatCurrency(stats.totalRemaining)}
           </div>
         </CardContent>
       </Card>
       
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Kilo</CardTitle>
+      <Card className="col-span-2 sm:col-span-1">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+          <CardTitle className="text-xs sm:text-sm font-medium">Total Kilo</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-orange-600">
+        <CardContent className="pt-0">
+          <div className="text-sm sm:text-2xl font-bold text-orange-600">
             {stats.totalKilo.toFixed(2)}
           </div>
         </CardContent>

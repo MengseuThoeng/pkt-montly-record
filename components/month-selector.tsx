@@ -48,46 +48,49 @@ export function MonthSelector({ selectedMonth, selectedYear, onMonthChange, isLo
   }
 
   return (
-    <Card className="mb-6">
-      <CardContent className="pt-6">
-        <div className="flex items-center space-x-4">
+    <Card className="mb-4 sm:mb-6">
+      <CardContent className="pt-4 sm:pt-6">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
           <div className="flex items-center space-x-2">
             <CalendarIcon className="h-4 w-4" />
             <span className="text-sm font-medium">Filter by Month:</span>
           </div>
           
-          <Select value={selectedMonth} onValueChange={(month) => onMonthChange(month, selectedYear)}>
-            <SelectTrigger className="w-32">
-              <SelectValue placeholder="Month" />
-            </SelectTrigger>
-            <SelectContent>
-              {months.map((month) => (
-                <SelectItem key={month.value} value={month.value}>
-                  {month.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 flex-1">
+            <Select value={selectedMonth} onValueChange={(month) => onMonthChange(month, selectedYear)}>
+              <SelectTrigger className="w-full sm:w-32">
+                <SelectValue placeholder="Month" />
+              </SelectTrigger>
+              <SelectContent>
+                {months.map((month) => (
+                  <SelectItem key={month.value} value={month.value}>
+                    {month.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          <Select value={selectedYear} onValueChange={(year) => onMonthChange(selectedMonth, year)}>
-            <SelectTrigger className="w-24">
-              <SelectValue placeholder="Year" />
-            </SelectTrigger>
-            <SelectContent>
-              {years.map((year) => (
-                <SelectItem key={year} value={year.toString()}>
-                  {year}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <Select value={selectedYear} onValueChange={(year) => onMonthChange(selectedMonth, year)}>
+              <SelectTrigger className="w-full sm:w-24">
+                <SelectValue placeholder="Year" />
+              </SelectTrigger>
+              <SelectContent>
+                {years.map((year) => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          <Button variant="outline" size="sm" onClick={handleCurrentMonth} disabled={isLoading}>
-            {isLoading && <RefreshCw className="mr-2 h-3 w-3 animate-spin" />}
-            Current Month
-          </Button>
+            <Button variant="outline" size="sm" onClick={handleCurrentMonth} disabled={isLoading} className="w-full sm:w-auto">
+              {isLoading && <RefreshCw className="mr-2 h-3 w-3 animate-spin" />}
+              <span className="sm:hidden">Current</span>
+              <span className="hidden sm:inline">Current Month</span>
+            </Button>
+          </div>
 
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-muted-foreground mt-2 sm:mt-0">
             Showing: <strong>{months.find(m => m.value === selectedMonth)?.label} {selectedYear}</strong>
           </div>
         </div>

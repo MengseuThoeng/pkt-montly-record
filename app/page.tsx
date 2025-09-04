@@ -110,34 +110,37 @@ export default function HomePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
       {/* Header with user info and logout */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Monthly Records</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold">Monthly Records</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Manage your monthly business records and track profits
           </p>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
           <div className="flex items-center space-x-2 text-sm text-muted-foreground">
             <User className="h-4 w-4" />
-            <span>Welcome, {session.user?.name}</span>
+            <span className="truncate">Welcome, {session.user?.name}</span>
           </div>
-          <Button
-            variant="outline"
-            onClick={handleRefresh}
-            disabled={isLoading}
-            className="flex items-center space-x-2"
-          >
-            <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
-            <span>Refresh</span>
-          </Button>
-          <RecordForm onSuccess={handleRefresh} />
-          <Button variant="outline" onClick={handleSignOut}>
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefresh}
+              disabled={isLoading}
+              className="flex items-center space-x-2"
+            >
+              <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
+              <span className="hidden sm:inline">Refresh</span>
+            </Button>
+            <RecordForm onSuccess={handleRefresh} />
+            <Button variant="outline" size="sm" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Logout</span>
+            </Button>
+          </div>
         </div>
       </div>
 
