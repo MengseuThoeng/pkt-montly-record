@@ -13,13 +13,16 @@ import { RecordsTable } from "@/components/records-table"
 import { RecordForm } from "@/components/record-form"
 import { DashboardStats } from "@/components/dashboard-stats"
 import { MonthSelector } from "@/components/month-selector"
+import { SearchBar } from "@/components/search-bar"
 import { Record } from "@/lib/types"
 
 export default function HomePage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [records, setRecords] = useState<Record[]>([])
+  const [filteredRecords, setFilteredRecords] = useState<Record[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState("")
   
   // Default to current month and year
   const currentDate = new Date()
@@ -74,11 +77,30 @@ export default function HomePage() {
     }
   }
 
+  // Filter records based on search query
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredRecords(records)
+    } else {
+      const filtered = records.filter(record => 
+        record.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        record.order.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        record.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        record.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      setFilteredRecords(filtered)
+    }
+  }, [records, searchQuery])
+
   useEffect(() => {
     if (session) {
       fetchRecords()
     }
   }, [session, selectedMonth, selectedYear])
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+  }
 
   const handleRefresh = () => {
     fetchRecords()
@@ -153,12 +175,25 @@ export default function HomePage() {
       />
 
       {/* Dashboard Stats */}
-      <DashboardStats records={records} />
+      <DashboardStats records={filteredRecords} />
+
+      {/* Search Bar */}
+      <SearchBar 
+        onSearch={handleSearch}
+        placeholder="Search by customer, order, location, or phone..."
+        className="mb-4 sm:mb-6"
+      />
 
       {/* Records Table */}
       <Card>
-        <CardHeader>
-          <CardTitle>Records</CardTitle>
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+          <CardTitle>
+            Records {searchQuery && (
+              <span className="text-sm font-normal text-muted-foreground ml-2">
+                ({filteredRecords.length} of {records.length} shown)
+              </span>
+            )}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -167,7 +202,7 @@ export default function HomePage() {
               <span className="ml-2">Loading records...</span>
             </div>
           ) : (
-            <RecordsTable records={records} onRefresh={handleRefresh} />
+            <RecordsTable records={filteredRecords} onRefresh={handleRefresh} />
           )}
         </CardContent>
       </Card>
