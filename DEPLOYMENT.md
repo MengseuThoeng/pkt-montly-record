@@ -14,7 +14,7 @@
 
 3. **Access your application:**
    - Main app: http://localhost:5000
-   - With Nginx: http://localhost
+   - With Nginx: http://localhost:8080
 
 ## 📋 Manual Deployment Steps
 

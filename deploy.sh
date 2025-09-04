@@ -133,7 +133,7 @@ docker compose ps
 echo ""
 echo "🌐 Your application is now running:"
 if [[ $COMPOSE_PROFILES == *"production"* ]]; then
-    echo "   - Main app: http://localhost (via Nginx)"
+    echo "   - Main app: http://localhost:8080 (via Nginx)"
     echo "   - Direct app: http://localhost:5000"
 else
     echo "   - Main app: http://localhost:5000"
