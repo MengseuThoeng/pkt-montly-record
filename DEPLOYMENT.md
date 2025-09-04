@@ -13,7 +13,7 @@
    ```
 
 3. **Access your application:**
-   - Main app: http://localhost:3000
+   - Main app: http://localhost:5000
    - With Nginx: http://localhost
 
 ## 📋 Manual Deployment Steps

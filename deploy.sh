@@ -39,7 +39,7 @@ DATABASE_URL="postgresql://pkt_user:${DB_PASSWORD}@postgres:5432/monthly_records
 
 # NextAuth Configuration  
 NEXTAUTH_SECRET="${NEXTAUTH_SECRET}"
-NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_URL="http://localhost:5000"
 
 # Node Environment
 NODE_ENV="production"
@@ -65,7 +65,7 @@ mkdir -p ssl
 read -p "🤔 Do you want to run with Nginx reverse proxy? (y/N): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    COMPOSE_PROFILES="--profile production"
+    COMPOSE_PROFILES="production"
     echo "🌐 Will start with Nginx reverse proxy"
     echo "⚠️  Make sure to configure SSL certificates in ./ssl/ directory"
 else
@@ -93,7 +93,11 @@ docker compose run --rm app npx prisma db seed || echo "No seed script found, sk
 
 # Start all services
 echo "🚀 Starting all services..."
-docker compose up -d $COMPOSE_PROFILES
+if [[ -n "$COMPOSE_PROFILES" ]]; then
+    docker compose --profile $COMPOSE_PROFILES up -d
+else
+    docker compose up -d
+fi
 
 echo ""
 echo "✅ Deployment completed successfully!"
@@ -105,9 +109,9 @@ echo ""
 echo "🌐 Your application is now running:"
 if [[ $COMPOSE_PROFILES == *"production"* ]]; then
     echo "   - Main app: http://localhost (via Nginx)"
-    echo "   - Direct app: http://localhost:3000"
+    echo "   - Direct app: http://localhost:5000"
 else
-    echo "   - Main app: http://localhost:3000"
+    echo "   - Main app: http://localhost:5000"
 fi
 echo "   - Database: postgresql://localhost:5432"
 echo ""
