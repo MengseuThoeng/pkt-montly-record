@@ -41,7 +41,6 @@ export default function HomePage() {
   const fetchRecords = async () => {
     try {
       setIsLoading(true)
-      console.log(`Fetching records for ${selectedMonth}/${selectedYear}`)
       const startTime = Date.now()
       
       const url = `/api/records?month=${selectedMonth}&year=${selectedYear}`
@@ -57,13 +56,11 @@ export default function HomePage() {
       
       clearTimeout(timeoutId)
       const endTime = Date.now()
-      console.log(`API call took ${endTime - startTime}ms`)
       
       if (!response.ok) {
         throw new Error("Failed to fetch records")
       }
       const data = await response.json()
-      console.log(`Received ${data.length} records`)
       setRecords(data)
     } catch (error: any) {
       if (error?.name === 'AbortError') {

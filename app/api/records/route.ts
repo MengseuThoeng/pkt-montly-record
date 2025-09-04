@@ -4,7 +4,6 @@ import { CreateRecordInput } from '@/lib/types'
 
 export async function GET(request: NextRequest) {
   try {
-    console.log('API: Starting records fetch')
     const startTime = Date.now()
     
     const { searchParams } = new URL(request.url)
@@ -17,8 +16,6 @@ export async function GET(request: NextRequest) {
       // Use more efficient date filtering
       const startDate = new Date(`${year}-${month}-01T00:00:00.000Z`)
       const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0, 23, 59, 59, 999)
-      
-      console.log(`API: Filtering from ${startDate.toISOString()} to ${endDate.toISOString()}`)
       
       whereClause = {
         orderDate: {
@@ -36,7 +33,6 @@ export async function GET(request: NextRequest) {
     })
     
     const endTime = Date.now()
-    console.log(`API: Query completed in ${endTime - startTime}ms, found ${records.length} records`)
     
     return NextResponse.json(records)
   } catch (error) {
