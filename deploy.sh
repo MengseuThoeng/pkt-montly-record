@@ -82,7 +82,32 @@ docker compose up -d postgres
 
 # Wait for PostgreSQL to be ready
 echo "⏳ Waiting for PostgreSQL to be ready..."
-sleep 10
+sleep 15
+
+# Check if postgres is ready and credentials work
+echo "🔍 Testing database connection..."
+max_attempts=10
+attempt=1
+
+while [ $attempt -le $max_attempts ]; do
+    if docker compose exec postgres pg_isready -U pkt_user -d monthly_records; then
+        echo "✅ PostgreSQL is ready!"
+        break
+    else
+        echo "⏳ Attempt $attempt/$max_attempts - PostgreSQL not ready yet..."
+        sleep 5
+        attempt=$((attempt + 1))
+    fi
+done
+
+if [ $attempt -gt $max_attempts ]; then
+    echo "❌ PostgreSQL failed to start properly. Trying to reset..."
+    echo "🔄 Stopping containers and cleaning volumes..."
+    docker compose down -v
+    echo "🚀 Starting PostgreSQL again..."
+    docker compose up -d postgres
+    sleep 20
+fi
 
 # Run database migrations
 echo "🔄 Running Prisma migrations..."
